@@ -1,26 +1,19 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import HttpApi from 'i18next-http-backend';
 
 i18n
+    .use(HttpApi)
     .use(initReactI18next)
     .init({
-        resources: {
-            en: {
-                translation: {
-                    welcome: "Welcome!",
-                }
-            },
-            es: {
-                translation: {
-                    welcome: "¡Bienvenido!",
-                }
-            }
+        backend: {
+            loadPath: 'http://localhost:2500/traducciones/{{lng}}',
         },
-        lng: "en",
-        fallbackLng: "en",
+        fallbackLng: 'en',
+        debug: true,
         interpolation: {
-            escapeValue: false
-        }
+            escapeValue: false,
+        },
     });
 
 export default i18n;
