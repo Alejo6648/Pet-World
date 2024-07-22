@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient.js';
 import { toast } from 'react-hot-toast';
@@ -27,17 +27,18 @@ function Login() {
             if (response.status === 200) {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
+                const userType = response.data.user.tipo;
 
-                if (response.data.user.tipo === 'admin') {
+                if (userType === 'admin') {
                     toast.success("Welcome Administrator");
-                    navigate('/Inicio-admin');
-                } else {
-                    toast.success("Bienvenido");
                     navigate('/Inicio');
+                } else {
+                    toast.error('Only administrators can access this system.');
+                    navigate('/AccessDenied');
                 }
             } else {
                 if (response.status === 404) {
-                    toast.error('Usuario no encontrado');
+                    toast.error('User not found');
                 } else if (response.status === 500) {
                     toast.error('Error interno del servidor');
                 } else {
@@ -79,7 +80,7 @@ function Login() {
                 </div>
             </div>
         </div>
-    );    
+    );
 }
 
 export default Login;
